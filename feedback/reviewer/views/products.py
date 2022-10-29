@@ -1,3 +1,4 @@
+from django.core.exceptions import PermissionDenied
 from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse, reverse_lazy
 from django.views.generic import CreateView, UpdateView, DeleteView, DetailView
@@ -6,6 +7,8 @@ from reviewer.models import Product
 from reviewer.forms import ProductForm
 
 from reviewer.models import Review
+
+from reviewer.views.feeds import GroupPermission
 
 
 class SuccessDetailUrlMixin:
@@ -27,23 +30,23 @@ class ProductView(DetailView):
         return context
 
 
-class ProductCreateView(SuccessDetailUrlMixin, CreateView):
+class ProductCreateView(GroupPermission, SuccessDetailUrlMixin, CreateView):
     template_name = 'add_product.html'
     form_class = ProductForm
     model = Product
+    groups = ['moderators']
 
 
-class ProductUpdateView(SuccessDetailUrlMixin, UpdateView):
+class ProductUpdateView(GroupPermission, SuccessDetailUrlMixin, UpdateView):
     template_name = 'edit_product.html'
     form_class = ProductForm
     model = Product
     context_object_name = 'product'
+    groups = ['moderators']
 
 
-class ProductDeleteView(DeleteView):
+class ProductDeleteView(GroupPermission, DeleteView):
     template_name = 'delete_confirm.html'
     model = Product
     success_url = reverse_lazy('index')
-
-
-
+    groups = ['moderators']

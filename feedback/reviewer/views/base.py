@@ -1,6 +1,3 @@
-from django.db.models import Q
-from django.shortcuts import redirect
-
 from django.views.generic import ListView
 
 from reviewer.models import Product

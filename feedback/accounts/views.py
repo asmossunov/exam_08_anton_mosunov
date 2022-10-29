@@ -1,4 +1,6 @@
 from django.contrib.auth import authenticate, login, logout, get_user_model
+from django.contrib.auth.models import User
+from django.core.exceptions import PermissionDenied
 from django.shortcuts import redirect
 from django.urls import reverse
 from django.views.generic import TemplateView, CreateView, DetailView, UpdateView
@@ -84,6 +86,12 @@ class UserChangeView(UpdateView):
     template_name = 'user_change.html'
     context_object_name = 'user_obj'
 
+    def dispatch(self, request, *args, **kwargs):
+        user = User.objects.get(pk=self.kwargs.get('pk'))
+        if request.user.username != user:
+            raise PermissionDenied
+        return super().dispatch(request, *args, **kwargs)
+
     def get_context_data(self, **kwargs):
         if 'profile_form' not in kwargs:
             kwargs['profile_form'] = self.get_profile_form()
@@ -121,6 +129,12 @@ class UserPasswordChangeView(UpdateView):
     template_name = 'user_password_change.html'
     form_class = PasswordChangeForm
     context_object_name = 'user_obj'
+
+    def dispatch(self, request, *args, **kwargs):
+        author = User.objects.get(pk=self.kwargs.get('pk'))
+        if request.user.username != author:
+            raise PermissionDenied
+        return super().dispatch(request, *args, **kwargs)
 
     def get_success_url(self):
         return reverse('login')

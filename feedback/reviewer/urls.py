@@ -20,5 +20,4 @@ urlpatterns = [
     path('feeds/<int:pk>/delete/', FeedDeleteView.as_view(), name='feed_delete'),
     path('feeds/<int:pk>/confirm-delete/', FeedDeleteView.as_view(), name='confirm_delete'),
 
-
 ]

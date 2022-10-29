@@ -27,20 +27,27 @@
                     <p class="card-description">{{ product.description }}</p>
                     <span class="added">добавлено: {{ product.created_at |date:'Y/m/d H:i:s' }}</span>
 
-                    <div class="row justify-content-center space-between">
 
-                        <div class="col-6 text-center">
-                            <a href="{% url 'product_delete' product.pk %}"><button type="submit" class="btn btn-secondary btn-block">Удалить</button></a>
-                        </div>
 
-                        <div class="col-6 text-center">
-                            <a href="{% url 'product_edit' product.pk %}"><button type="submit" class="btn btn-secondary btn-block">Редактировать</button></a>
-                        </div>
+                        <div class="row justify-content-center space-between">
+                            {% if  perms.product.delete_product %}
+                                <div class="col-6 text-center">
+                                    <a href="{% url 'product_delete' product.pk %}"><button type="submit" class="btn btn-secondary btn-block">Удалить</button></a>
+                                </div>
+                            {% endif %}
 
-                        <div class="col-6 text-center">
-                            <a href="{% url 'feed_create' product.pk %}"><button type="submit" class="btn btn-secondary btn-block">Добавить отзыв</button></a>
+                            {% if  perms.product.change_product or request.user == product.%}
+                                <div class="col-6 text-center">
+                                    <a href="{% url 'product_edit' product.pk %}"><button type="submit" class="btn btn-secondary btn-block">Редактировать</button></a>
+                                </div>
+                            {% endif %}
+
+                            {% if request.user.is_authenticated %}
+                                <div class="col-6 text-center">
+                                    <a href="{% url 'feed_create' product.pk %}"><button type="submit" class="btn btn-secondary btn-block">Добавить отзыв</button></a>
+                                </div>
+                            {% endif %}
                         </div>
-                    </div>
 
                     <h3>Средняя оценка</h3>
                     {% if avg_rate.avg is not None %}
@@ -61,12 +68,17 @@
 
                             <p>Автор: <a href="{% url 'profile' review.author.pk %}">{{ review.author.username }}</a></p>
                         </div>
-                        <div class="col-2 text-center">
-                            <a href="{% url 'feed_delete' review.pk %}"><button type="submit" class="btn btn-secondary btn-block">Удалить отзыв</button></a>
-                        </div>
-                        <div class="col-2 text-center">
-                            <a href="{% url 'feed_update' review.pk %}"><button type="submit" class="btn btn-secondary btn-block">Редактировать</button></a>
-                        </div>
+                        {% if request.user == review.author or request.user.is_superuser %}
+                            <div class="col-2 text-center">
+                                <a href="{% url 'feed_delete' review.pk %}"><button type="submit" class="btn btn-secondary btn-block">Удалить отзыв</button></a>
+                            </div>
+                        {% endif %}
+
+                        {% if request.user == review.author or request.user.is_superuser %}
+                            <div class="col-2 text-center">
+                                <a href="{% url 'feed_update' review.pk %}"><button type="submit" class="btn btn-secondary btn-block">Редактировать</button></a>
+                            </div>
+                        {% endif %}
 
 
                     {% endfor %}
