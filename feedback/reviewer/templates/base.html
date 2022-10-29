@@ -24,6 +24,15 @@
                 </svg> Reviewer</a>
 
                 <a class="link" href="{% url 'product_add' %}">Добавить товар</a>
+                <a class="link" href="{% url 'login' %}">Вход</a>
+                <a class="link" href="{% url 'register' %}">Регистрация</a>
+                {% if user.is_authenticated %}
+                    <a class="link" href="{% url 'profile' request.user.pk %}">Страница пользователя</a>
+                    <a class="link" href="{% url 'logout' %}">Выйти</a>
+                {% endif %}
+
+
+                <p>Привет, {{request.user}}
 
 
            </ul>

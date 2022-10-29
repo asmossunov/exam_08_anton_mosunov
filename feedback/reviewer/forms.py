@@ -30,7 +30,7 @@ class ReviewForm(forms.ModelForm):
 
     class Meta:
         model = Review
-        fields = ('author', 'text', 'score')
+        fields = ('text', 'score')
         validators = (min_value_validator, max_value_validator)
 
 

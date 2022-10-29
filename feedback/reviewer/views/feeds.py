@@ -1,10 +1,12 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.shortcuts import redirect
+from django.shortcuts import redirect, get_object_or_404
 from django.urls import reverse
-from django.views.generic import CreateView, UpdateView, DeleteView, DetailView
+from django.views.generic import CreateView, UpdateView, DeleteView
 
 from reviewer.models import Review
 from reviewer.forms import ReviewForm
+
+from reviewer.models import Product
 
 
 class FeedCreateView(CreateView):
@@ -14,10 +16,12 @@ class FeedCreateView(CreateView):
     success_url = '/'
 
     def form_valid(self, form):
-        form.instance.product_id = self.kwargs['pk']
-        return super(FeedCreateView, self).form_valid(form)
-
-
+        product = get_object_or_404(Product, pk=self.kwargs.get('pk'))
+        form.instance.author = self.request.user
+        review = form.save(commit=False)
+        review.product = product
+        review.save()
+        return redirect('product_detail', pk=product.pk)
 
 
 class FeedAddView(LoginRequiredMixin, CreateView):

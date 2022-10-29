@@ -1,7 +1,7 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse, reverse_lazy
 from django.views.generic import CreateView, UpdateView, DeleteView, DetailView
-
+from django.db.models import Avg
 from reviewer.models import Product
 from reviewer.forms import ProductForm
 
@@ -21,8 +21,9 @@ class ProductView(DetailView):
         context = super().get_context_data(**kwargs)
         product = self.object
         reviews = Review.objects.filter(is_deleted=False, product=product)
-        print(reviews)
+        avg_rate = Review.objects.filter(product=product).aggregate(avg=Avg('score'))
         context['reviews'] = reviews
+        context['avg_rate'] = avg_rate
         return context
 
 
@@ -44,17 +45,5 @@ class ProductDeleteView(DeleteView):
     model = Product
     success_url = reverse_lazy('index')
 
-
-def category_view(request, category):
-    products = Product.objects.filter(product_category=category, is_deleted=False, remains__gt=0)\
-        .order_by('product_name')
-    find_form = SearchForm()
-    context = {
-        'category': category,
-        'choices': CategoryChoices.choices,
-        'find_form': find_form,
-        'products': products,
-    }
-    return render(request, 'categories.html', context)
 
 
