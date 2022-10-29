@@ -1,5 +1,7 @@
 from django.contrib.auth import get_user_model
+from django.core.exceptions import ValidationError
 from django.db import models
+from django.utils.deconstruct import deconstructible
 
 
 class Review(models.Model):
@@ -40,3 +42,15 @@ class Review(models.Model):
 
     def __str__(self):
         return f"{self.text} {self.score}"
+
+@deconstructible
+def max_value_validator(string):
+    if string > 5:
+        raise ValidationError("Больше чем максимально допустимое значение")
+    return string
+
+@deconstructible
+def min_value_validator(string):
+    if string < 1:
+        raise ValidationError("Меньше чем минимально допустимое значение")
+    return string

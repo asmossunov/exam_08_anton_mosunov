@@ -1,0 +1,67 @@
+{% extends 'base.html' %}
+{% block title %}
+    Product: {{ product.product_name }}
+{% endblock %}
+{% block menu %}
+{% endblock %}
+{% block content %}
+    <div class="container">
+        <p class="main-title-home"></p>
+        <div class="box">
+        {% if answer is not None %}
+            <h1 class="answer" style="color: red">{{ answer }}</h1>
+        {% endif %}
+
+            <div class="row justify-content-center ">
+                <div class="col-5 text-center">
+                    <img class="product_card" src="{{ product.image.url }}" alt="Card image cap">
+                </div>
+                <div class="col-5 card_desc">
+                    <h5 class="card-title">{{ product.product_name }}</h5>
+
+                    {% for choice in choices %}
+                        {% if product.product_category == choice.0 %}
+                            <a class="category-link" href="{% url 'list_by_category' choice.0 %}">{{ choice.1 }}</a>
+                        {% endif%}
+                    {% endfor %}
+                    <p class="card-description">{{ product.description }}</p>
+                    <span class="added">добавлено: {{ product.created_at |date:'Y/m/d H:i:s' }}</span>
+
+                    <div class="row justify-content-center space-between">
+
+                        <div class="col-6 text-center">
+                            <a href="{% url 'product_delete' product.pk %}"><button type="submit" class="btn btn-secondary btn-block">Удалить</button></a>
+                        </div>
+
+                        <div class="col-6 text-center">
+                            <a href="{% url 'product_edit' product.pk %}"><button type="submit" class="btn btn-secondary btn-block">Редактировать</button></a>
+                        </div>
+
+                        <div class="col-6 text-center">
+                            <a href="{% url 'feed_create' product.pk %}"><button type="submit" class="btn btn-secondary btn-block">Добавить отзыв</button></a>
+                        </div>
+                    </div>
+
+
+
+
+                </div>
+                <h2>Отзывы:</h2>
+                <div class="row justify-content-center space-between">
+                    {% for review in reviews %}
+                        <div class="col-5 text-center">
+                            <p>{{review}}<p/>
+                        </div>
+                        <div class="col-2 text-center">
+                            <a href="{% url 'feed_delete' review.pk %}"><button type="submit" class="btn btn-secondary btn-block">Удалить отзыв</button></a>
+                        </div>
+                        <div class="col-2 text-center">
+                            <a href="{% url 'feed_update' review.pk %}"><button type="submit" class="btn btn-secondary btn-block">Редактировать</button></a>
+                        </div>
+
+
+                    {% endfor %}
+
+
+    </div>
+{% endblock %}

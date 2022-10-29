@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+{% block title %}
+    Delete:{{ task.task_text }}
+{% endblock %}
+{% block menu %}
+{% endblock %}
+{% block content %}
+    <div class="container">
+        <div class="box">
+
+            <div class="head_text heading text-center">
+                <p class="main-title-home">TASK DELETE</p>
+            </div>
+
+            <div class="form">
+                {% include 'partials/delete_confirm_partial.html' with object='отзыв' button_text='Удалить' %}
+
+
+                <div class="col-3 text-center ">
+                    <a href="{% url 'index' %}"><button type="submit" class="btn btn-outline-secondary">Нет</button></a>
+                </div>
+
+            </div>
+
+
+        </div>
+    </div>
+{% endblock %}

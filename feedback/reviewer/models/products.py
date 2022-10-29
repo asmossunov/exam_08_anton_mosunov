@@ -26,9 +26,8 @@ class Product(models.Model):
     image = models.ImageField(
         null=False,
         blank=True,
-        upload_to='products_images',
-        verbose_name='Аватар',
-        default='default_image/default-product-image.jpg'
+        verbose_name='Изображение',
+        default='default-product-image.jpg'
     )
     is_deleted = models.BooleanField(
         verbose_name='Удалено',

@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+
+{% block menu %}
+{% endblock %}
+
+{% block content %}
+
+
+
+    <div class="row category-header justify-content-center">
+        <div class="col-10">
+            {% for choice in choices %}
+                {% if choice == category %}
+                    <p class="category-title text-center">{{ choice.1 }}</p>
+                {% endif %}
+            {% endfor %}
+        </div>
+    </div>
+
+    <div class="row row-card row-cols-3 row-cols-lg-3 g-2 g-lg-3 justify-content-center">
+        {% for product in products %}
+            <div class="col between-space">
+               <div class="p-3 border bg-light center-block">
+                  <a href="{% url 'product_detail' product.pk %}"><img class="card-img-top" src="{{ product.image.url }}" alt="Card image cap"></a>
+                  <div class="card-body">
+                    <h5 class="card-title">{{ product.product_name }}</h5>
+                    {% for choice in choices %}
+                        {% if product.product_category == choice.0 %}
+                            <a class="category-link" href="{% url 'list_by_category' choice.0 %}">{{ choice.1 }}</a>
+                        {% endif%}
+                    {% endfor %}
+{#                            {{product.get_product_category_display}}#}
+                    <a class="detail" href="{% url 'product_detail' product.pk %}">узнать подробнее >>> </a>
+                    <div class="card-footer">
+
+
+
+
+
+                    </div>
+                  </div>
+               </div>
+            </div>
+        {% empty %}
+            <div class="head_text heading text-center">
+                <p class="about-game">нет ни одного товара в выбранной категории </p>
+            </div>
+        {% endfor %}
+
+    </div>
+
+{% endblock %}

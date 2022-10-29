@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+{% block title %}
+    Task: {{ task.text }}
+{% endblock %}
+{% block content %}
+    <div class="container">
+        <div class="box">
+
+            <div class="head_text heading text-center">
+
+                <p class="about-game">Отзывы к товару</p>
+            </div>
+
+            <div class="row justify-content-center text-center">
+                <div class="col-3 info-block text-center">
+                    <span class="descript">Текст отзыва:</span>
+                </div>
+                <div class="col-7 info-block text-center">
+                    <span class="info-head">{{ review.text }}</span>
+                </div>
+            </div>
+
+            <div class="row justify-content-center text-center">
+                <div class="col-3 info-block text-center">
+                    <span class="descript">Автор отзыва: </span>
+                </div>
+                <div class="col-7 info-block text-center">
+                    <div>
+                        <span class="info-head">{{ review.author }}</span>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="row justify-content-center text-center">
+
+                <div class="col-4 text-center">
+                    <a href="{% url 'index' %}"><button type="submit" class="btn btn-outline-secondary"><i class="fa fa-home"></i></button></a>
+                </div>
+
+
+                <div class="col-3 text-center">
+                    <a href="{% url 'feed_delete' task.pk %}"><button type="submit" class="btn btn-secondary btn-block">Удалить</button></a>
+                </div>
+
+                <div class="col-4 text-center">
+                    <a href="{% url 'feed_update' task.pk %}"><button type="submit" class="btn btn-secondary btn-block">Редактировать</button></a>
+                </div>
+
+            </div>
+        </div>
+    </div>
+{% endblock %}
